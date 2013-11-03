@@ -25,7 +25,7 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 			// We only want one argument;If there were more a fight would happen
 			if (args.length != 1) return false;
 			
-			// Cant let those pesky robots use this command
+			// Can't let those pesky robots use this command
 			if (!(sender instanceof Player)) return true;
 			
 			Player player = (Player) sender;
@@ -85,6 +85,8 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 			Inventory toBeSynced = event.getInventory();
 			
 			Player target = plugin.getServer().getPlayer(results[1]);
+			
+			if (target == null || !target.isOnline()) return;
 			
 			// Syncs the armor.
 			// Magic Numbers galore.
