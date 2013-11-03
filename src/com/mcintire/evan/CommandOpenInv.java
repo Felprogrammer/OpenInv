@@ -24,13 +24,21 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 		if (cmd.getName().equalsIgnoreCase("openinv")) {
 			// We only want one argument;If there were more a fight would happen
 			if (args.length != 1) return false;
+			
 			// Cant let those pesky robots use this command
 			if (!(sender instanceof Player)) return true;
 			
 			Player player = (Player) sender;
 			Player target = plugin.getServer().getPlayer(args[0]);
 			
+			// If the target has override, do nothing
+			
 			if (target != null) {
+				if (target.hasPermission("cubeplugin.openinv.override")) {
+					player.sendMessage(ChatColor.RED + "That inventory is protected");
+					return true;
+				}
+				
 				Inventory targetInventory = target.getInventory();
 				Inventory inv = Bukkit.createInventory(target, 45, "OpenInv:" + target.getName());
 				
@@ -46,6 +54,7 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 				}
 				
 				player.openInventory(inv);
+				return true;
 			} else {
 				player.sendMessage(ChatColor.DARK_RED + "Player Not Found");
 				return true;
