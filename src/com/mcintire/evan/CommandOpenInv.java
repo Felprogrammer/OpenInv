@@ -61,9 +61,9 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 		String[] results = invTitle.split(":");
 		
 		Player target = plugin.getServer().getPlayer(results[1]);
-		target.getInventory().setBoots(event.getInventory().getItem(35));
-		target.getInventory().setLeggings(event.getInventory().getItem(36));
-		target.getInventory().setChestplate(event.getInventory().getItem(37));
-		target.getInventory().setHelmet(event.getInventory().getItem(38));
+		target.getInventory().setBoots(event.getInventory().getItem(36));
+		target.getInventory().setLeggings(event.getInventory().getItem(37));
+		target.getInventory().setChestplate(event.getInventory().getItem(38));
+		target.getInventory().setHelmet(event.getInventory().getItem(39));
 	}
 }
