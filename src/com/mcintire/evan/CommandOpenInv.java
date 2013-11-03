@@ -57,13 +57,22 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 	
 	@EventHandler
 	public void onOpenInvClose(InventoryCloseEvent event) {
-		String invTitle = event.getInventory().getName();
-		String[] results = invTitle.split(":");
-		
-		Player target = plugin.getServer().getPlayer(results[1]);
-		target.getInventory().setBoots(event.getInventory().getItem(36));
-		target.getInventory().setLeggings(event.getInventory().getItem(37));
-		target.getInventory().setChestplate(event.getInventory().getItem(38));
-		target.getInventory().setHelmet(event.getInventory().getItem(39));
+		if (event.getInventory().getName().contains("OpenInv")) {
+			String invTitle = event.getInventory().getName();
+			String[] results = invTitle.split(":");
+			Inventory toBeSynced = event.getInventory();
+			
+			Player target = plugin.getServer().getPlayer(results[1]);
+			target.getInventory().setBoots(toBeSynced.getItem(36));
+			target.getInventory().setLeggings(toBeSynced.getItem(37));
+			target.getInventory().setChestplate(toBeSynced.getItem(38));
+			target.getInventory().setHelmet(toBeSynced.getItem(39));
+			
+			for (int i = 0; i < 36; i++) {
+				if (toBeSynced.getItem(i) != null) {
+					target.getInventory().setItem(i, toBeSynced.getItem(i));
+				}
+			}
+		}
 	}
 }
