@@ -5,3 +5,4 @@ version: 1.0
 commands:
   openinv:
     description: Opens the inventory of the player specified.
+    usage: /<command> <player>
