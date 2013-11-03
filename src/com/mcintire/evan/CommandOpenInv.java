@@ -56,14 +56,18 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		Player p = event.getPlayer();
-		saveInventory(p.getInventory(), plugin.getDataFolder() + File.separator + "example.bin");
+		saveInventory(p, plugin.getDataFolder() + File.separator + p.getName() + ".bin");
 		plugin.getLogger().info("PLAYER LEAVE");
 	}
 	
-	public void saveInventory(Inventory i, String path) {
+	public void saveInventory(Player p, String path) {
 		try {
+			File f = new File(path);
+			f.createNewFile();
 			HashMap<String, ItemStack[]> inventory = new HashMap<String, ItemStack[]>();
-			ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(path));
+			inventory.put(p.getName() + " Inventory", p.getInventory().getContents());
+			inventory.put(p.getName() + " Armor", p.getInventory().getArmorContents());
+			ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(f));
 			oStream.writeObject(inventory);
 			oStream.flush();
 			oStream.close();
