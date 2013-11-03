@@ -32,30 +32,37 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 			Player target = plugin.getServer().getPlayer(args[0]);
 			
 			// If the target has override, do nothing
-			
 			if (target != null) {
 				if (target.hasPermission("cubeplugin.openinv.override")) {
 					player.sendMessage(ChatColor.RED + "That inventory is protected");
 					return true;
 				}
 				
+				// Get the target's inventory as well as create a new one with
+				// 45 slots
 				Inventory targetInventory = target.getInventory();
 				Inventory inv = Bukkit.createInventory(target, 45, "OpenInv:" + target.getName());
 				
+				// loop through the target inventory and copy the items over to
+				// the new one
 				for (int i = 0; i < 36; i++) {
 					if (targetInventory.getItem(i) != null) {
 						inv.setItem(i, targetInventory.getItem(i));
 					}
 				}
+				
+				// Loop through the armor and add it to the new inventory
 				int pos = 36;
 				for (ItemStack item : target.getInventory().getArmorContents()) {
 					if (item != null) inv.setItem(pos, item);
 					pos++;
 				}
 				
+				// Open the inventory; everything went smooth
 				player.openInventory(inv);
 				return true;
 			} else {
+				// The specified player does not exist
 				player.sendMessage(ChatColor.DARK_RED + "Player Not Found");
 				return true;
 			}
@@ -64,11 +71,17 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 		
 	}
 	
+	/**
+	 * This function runs when the inventory is closed. It checks if it has the
+	 * correct name, and if it does, it goes through and syncs the inventory
+	 * with the player's
+	 */
 	@EventHandler
 	public void onOpenInvClose(InventoryCloseEvent event) {
 		if (event.getInventory().getName().contains("OpenInv")) {
 			String invTitle = event.getInventory().getName();
 			String[] results = invTitle.split(":");
+			
 			Inventory toBeSynced = event.getInventory();
 			
 			Player target = plugin.getServer().getPlayer(results[1]);
