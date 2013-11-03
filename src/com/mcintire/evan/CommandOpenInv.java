@@ -27,7 +27,7 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 			// Cant let those pesky robots use this command
 			if (!(sender instanceof Player)) return true;
 			
-			Player p = (Player) sender;
+			Player player = (Player) sender;
 			Player target = plugin.getServer().getPlayer(args[0]);
 			
 			if (target != null) {
@@ -45,9 +45,9 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 					pos++;
 				}
 				
-				p.openInventory(inv);
+				player.openInventory(inv);
 			} else {
-				p.sendMessage(ChatColor.DARK_RED + "Player Not Found");
+				player.sendMessage(ChatColor.DARK_RED + "Player Not Found");
 				return true;
 			}
 		}
@@ -63,11 +63,15 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 			Inventory toBeSynced = event.getInventory();
 			
 			Player target = plugin.getServer().getPlayer(results[1]);
+			
+			// Syncs the armor.
+			// Magic Numbers galore.
 			target.getInventory().setBoots(toBeSynced.getItem(36));
 			target.getInventory().setLeggings(toBeSynced.getItem(37));
 			target.getInventory().setChestplate(toBeSynced.getItem(38));
 			target.getInventory().setHelmet(toBeSynced.getItem(39));
 			
+			// Loops through and syncs all the slots
 			for (int i = 0; i < 36; i++) {
 				if (toBeSynced.getItem(i) != null) {
 					target.getInventory().setItem(i, toBeSynced.getItem(i));

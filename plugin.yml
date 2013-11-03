@@ -6,3 +6,9 @@ commands:
   openinv:
     description: Opens the inventory of the player specified.
     usage: /<command> <player>
+	
+permissions:
+  cubeplugin.openinv:
+    description: Allows you to open inventories of others
+  cubeplugin.openinv.override:
+    descrisption: Protects your inventory from being opened
