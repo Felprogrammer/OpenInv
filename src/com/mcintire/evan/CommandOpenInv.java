@@ -1,11 +1,18 @@
 package com.mcintire.evan;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,21 +26,54 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (cmd.getName().equalsIgnoreCase("openinv")) {
+			if (args.length != 1) return true;
+			if (!(sender instanceof Player)) return true;
 			Player p = (Player) sender;
+			Player target = plugin.getServer().getPlayer(args[0]);
 			
-			Inventory i = Bukkit.createInventory(p, 45);
-			int slot = 0;
-			for (ItemStack item : p.getInventory().getContents()) {
-				i.setItem(slot, item);
-				slot++;
+			if (target != null) {
+				Inventory inv = Bukkit.createInventory(p, 45);
+				int slot = 0;
+				for (int i = 0; i < 36; i++) {
+					ItemStack item = target.getInventory().getItem(i);
+					if (item != null) {
+						inv.setItem(i, item);
+					}
+				}
+				slot = 36;
+				for (ItemStack armorPiece : p.getInventory().getArmorContents()) {
+					inv.setItem(slot, armorPiece);
+					slot++;
+				}
+				p.openInventory(inv);
+				
 			}
-			slot = 36;
-			for (ItemStack armorPiece : p.getInventory().getArmorContents()) {
-				i.setItem(slot, armorPiece);
-				slot++;
-			}
-			p.openInventory(i);
+		} else {
 		}
 		return false;
+	}
+	
+	@EventHandler
+	public void onPlayerLeave(PlayerQuitEvent event) {
+		Player p = event.getPlayer();
+		saveInventory(p.getInventory(), plugin.getDataFolder() + File.separator + "example.bin");
+		plugin.getLogger().info("PLAYER LEAVE");
+	}
+	
+	public void saveInventory(Inventory i, String path) {
+		try {
+			HashMap<String, ItemStack[]> inventory = new HashMap<String, ItemStack[]>();
+			ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(path));
+			oStream.writeObject(inventory);
+			oStream.flush();
+			oStream.close();
+		} catch (Exception e) {
+			
+		}
+		
+	}
+	
+	public void loadInventory() {
+		
 	}
 }

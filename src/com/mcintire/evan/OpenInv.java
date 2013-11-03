@@ -7,6 +7,8 @@ public class OpenInv extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info("Enabling");
 		getCommand("openinv").setExecutor(new CommandOpenInv(this));
+		getServer().getPluginManager().registerEvents(new CommandOpenInv(this), this);
+		
 	}
 	
 	@Override
