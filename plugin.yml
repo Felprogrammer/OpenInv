@@ -7,7 +7,6 @@ commands:
     description: Opens the inventory of the player specified.
     usage: /<command> <player>
     permission: cubeplugin.openinv
-
 permissions:
   cubeplugin.openinv:
     description: Allows you to open inventories of others
