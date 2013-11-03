@@ -69,6 +69,7 @@ public class CommandOpenInv implements CommandExecutor, Listener {
 		HashMap<String, PlayerInventory> inventory = new HashMap<String, PlayerInventory>();
 		inventory.put(p.getName(), p.getInventory());
 		plugin.getConfig().createSection("players.inventory." + p.getName(), inventory);
+		plugin.saveConfig();
 	}
 	
 	// public HashMap<String, ItemStack[]> loadInventory(String path) {
